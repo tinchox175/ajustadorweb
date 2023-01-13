@@ -257,6 +257,15 @@ you = create_proxy(nib)
 b = document.getElementById("yo")
 b.addEventListener("click", you, False)
 
+async def limpiadora(event):
+  p.circle(0, 0)
+  p_json = json.dumps(json_item(p))
+  Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+
+limpia = create_proxy(limpiadora)
+
+clear = document.getElementById("btn")
+clear.addEventListener("click", limpia, False)
 </py-script>
 </body>
 </html>
