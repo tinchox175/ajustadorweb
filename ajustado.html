@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.2.min.js"></script>
+    <title>Ajustador web</title>
+    <py-env>
+    - bokeh
+    - pandas
+    - scipy
+    </py-env>
+    <!--<link rel="stylesheet" href="tinchox175.github.io/ajustadorweb/visuales.css" />-->
+    <link rel="stylesheet" href="visuales.css" />
+  </head>
+  <body>
+  <div>
+    <a href="https://github.com/tinchox175/ajustadorweb"><img src="github.png" style="width:36px;height:36px;float:right"></a>
+  </div>
+  <div style="float: right">
+  <img id="hintB" src="hint.png" width="48" height="48">
+  </div>
+  <div id="hint" class="modal">
+
+  <img class="modal-content" id="tutorialP">
+
+  <span class="close">&times;</span>
+  </div>
+  <center><h1>Visualizador ajustador de funciones.</h1></center>
+    <br />
+    <label for="myfile">Elegí tu archivo de dos columnas:</label>
+    <input type="file" id="myfile" name="myfile">
+    <br />
+    <br />
+    <div id="print_output"></div>
+    <br />
+      <div id="content">
+        <center>
+        <img id="cargando" src="cargando.gif" width="1000" height="200">
+        </center>
+      </div>
+    </div>
+    <center><div id="plot"></div></center>
+    <br>
+    <button id="btn">Limpiar gráficos</button>
+    <br>
+    <button id="yo">Ajustar</button>
+    <input type="text" id="funcionajusta" name="funcionajusta" placeholder="Ej.: a*np.sin(b*x+c)+d*e">
+    
+    <script>
+    const container = document.getElementById('plot');
+
+    const tuto = document.getElementById('content');
+    
+    const btn = document.getElementById('btn');
+    
+    btn.addEventListener('click', function handleClick() {
+      container.replaceChildren();
+    });
+    const graficoold = document.getElementById('plot');
+    
+    const regraficar = document.getElementById('yo');
+    
+    regraficar.addEventListener('click', function handleClick() {
+      graficoold.replaceChildren();
+    });
+    document.getElementById('myfile').onchange = function() {
+      tuto.replaceChildren();
+    }
+    var modal = document.getElementById("hint");
+    var img = document.getElementById("hintB");
+    var modalImg = document.getElementById("tutorialP");
+    img.onclick = function(){
+      modal.style.display = "block";
+      modalImg.src = "tutorial.png";
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+      modal.style.display = "none";
+}
+}
+
+    </script>
+
+<br>
+<div id="parametros">
+Punto de partida para los parámetros (opcional):
+<input type="text" id="par1" name="par1" placeholder="Primer param. (a)">
+<input type="text" id="par2" name="par2" placeholder="Segundo param. (b)">
+<input type="text" id="par3" name="par3" placeholder="Tercer param. (c)">
+<input type="text" id="par4" name="par4" placeholder="Cuarto param. (d)">
+<input type="text" id="par5" name="par5" placeholder="Quinto param. (e)">
+</div>
+<py-script>
+import json
+import asyncio
+from js import document, FileReader, console, JSON, Bokeh
+from pyodide import create_proxy
+import numpy as np
+from bokeh.embed import json_item
+from bokeh.plotting import figure
+from bokeh.resources import CDN
+from scipy.optimize import curve_fit
+
+document.getElementById("content").innerHTML = ''
+p = figure(plot_width=1000, plot_height=600)
+p.circle(0, 0)
+p_json = json.dumps(json_item(p))
+Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+
+async def process_file(event):
+      fileList = event.target.files.to_py()
+      for f in fileList:
+        data = await f.text()
+        lista = data.split("\r\n")
+        for i in range(len(lista)):
+          lista[i-1] = lista[i-1].split(',')
+        data = np.transpose(lista)
+        data = np.concatenate(data)
+        global data1
+        data1 = []
+        global data2
+        data2 = []
+        i = 1
+        while i*2<(len(data)):
+          if data[(i)*2]=='':
+            data[i*2] = data[(i-1)*2]
+          data1.append(data[i*2])
+          i+=1 
+        i = 1
+        while i*2<(len(data)):
+          try:
+            if data[i*2+1]=='':
+              data[i*2+1] = data[(i-1)*2+1]
+            data2.append(data[i*2+1])
+          except IndexError:
+            pass
+          i+=1
+        data1 = np.array(data1, dtype=np.float32)
+        data2 = np.array(data2, dtype=np.float32)
+        global data3
+        data3 = [data1,data2]
+        document.getElementById("plot").innerHTML = ''
+        p = figure(plot_width=1000, plot_height=600)
+        p.line(data1, data2, line_width = 1)
+        p.circle(data1, data2)
+        p_json = json.dumps(json_item(p))
+        Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+        #document.getElementById("content").innerHTML = data3
+
+
+file_event = create_proxy(process_file)
+ 
+e = document.getElementById("myfile")
+e.addEventListener("change", file_event, False)
+
+async def guarda(event):
+  global funcionajustadora
+  funcionajustadora = Element('funcionajusta').element.value
+
+guardar = create_proxy(guarda)
+
+a = document.getElementById("funcionajusta")
+a.addEventListener("input", guardar, False)
+
+async def guarda(event):
+  global p1
+  p1 = Element('par1').element.value
+guardar = create_proxy(guarda)
+par1 = document.getElementById("par1")
+par1.addEventListener("input", guardar, False)
+
+async def guarda(event):
+  global p2
+  p2 = Element('par2').element.value
+guardar = create_proxy(guarda)
+par2 = document.getElementById("par2")
+par2.addEventListener("input", guardar, False)
+
+async def guarda(event):
+  global p3
+  p3 = Element('par3').element.value
+guardar = create_proxy(guarda)
+par3 = document.getElementById("par3")
+par3.addEventListener("input", guardar, False)
+
+async def guarda(event):
+  global p4
+  p4 = Element('par4').element.value
+guardar = create_proxy(guarda)
+par4 = document.getElementById("par4")
+par4.addEventListener("input", guardar, False)
+
+async def guarda(event):
+  global p5
+  p5 = Element('par5').element.value
+guardar = create_proxy(guarda)
+par5 = document.getElementById("par5")
+par5.addEventListener("input", guardar, False)
+
+def ajuste(x,a,b,c,d,e):
+  y = eval(funcionajustadora)
+  return y
+
+async def nib(event):
+  global popt
+  pcero = [1,1,1,1,1]
+  try:
+    pcero[0]= float(p1)
+  except NameError:
+    pass
+  except ValueError:
+    pass
+  try:
+    pcero[1]= float(p2)
+  except NameError:
+    pass
+  except ValueError:
+    pass
+  try:
+    pcero[2]= float(p3)
+  except NameError:
+    pass
+  except ValueError:
+    pass
+  try:
+    pcero[3]=float(p4)
+  except NameError:
+    pass
+  except ValueError:
+    pass
+  try:
+    pcero[4]= float(p5)
+  except NameError:
+    pass
+  except ValueError:
+    pass
+  try:
+    popt, pcov = curve_fit(ajuste, data1[:len(data2)], data2, p0=pcero)
+  except ValueError:
+    popt, pcov = curve_fit(ajuste, data1, data2[:len(data1)], p0=pcero)
+  p = figure(plot_width=1000, plot_height=600)
+  p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
+  p.line(data1, data2, line_width = 1)
+  p.circle(data1, data2)
+  p_json = json.dumps(json_item(p))
+  Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+  document.getElementById("content").innerHTML = popt,np.sqrt(np.diag(pcov))
+
+you = create_proxy(nib)
+
+b = document.getElementById("yo")
+b.addEventListener("click", you, False)
+
+</py-script>
+</body>
+</html>
