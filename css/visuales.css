@@ -22,10 +22,16 @@
   }
 #parametros{
   margin-top:4px;
-
-
 }
-
+#miarchivo{
+    color: white;
+}
+#parametros-output{
+    color: white;
+}
+#partida{
+    color: white;
+}
   #yo:hover {
     background-color: #3A3A66;
     color: white;
