@@ -42,7 +42,7 @@ async def process_file(event):
                 break
             else:
                 data2.append(data[i][1])
-        i+=1
+            i+=1
         data1 = np.array(data1, dtype=np.float32)
         data2 = np.array(data2, dtype=np.float32)
         global data3
