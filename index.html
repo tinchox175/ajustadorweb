@@ -11,7 +11,7 @@
     <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.2.min.js"></script>
     <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.2.min.js"></script>
     <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.2.min.js"></script>
-    <title>Ajustador web</title>
+    <title>Fitear</title>
     <py-env>
     - bokeh
     - pandas
@@ -33,15 +33,15 @@
 
   <span class="close">&times;</span>
   </div>
-  <center><h1>Visualizador ajustador de funciones.</h1></center>
+  <center><h1>Fite.ar, el ajustador de datos!</h1></center>
     <br />
-    <label for="myfile">Elegí tu archivo de dos columnas:</label>
+    <div id='miarchivo'><label for="myfile">Elegí tu archivo:</label></div>
     <input type="file" id="myfile" name="myfile">
     <br />
     <br />
     <div id="print_output"></div>
     <br />
-      <div id='parametros-output'></div>
+      <center><div id='parametros-output'></div></center>
       <div id="content">
         <center>
         <img id="cargando" src="imagenes/cargando.gif" width="1000" height="200">
@@ -59,7 +59,7 @@
 
 <br>
 <div id="parametros">
-Punto de partida para los parámetros (opcional):
+  <div id='partida'>Punto de partida para los parámetros (opcional):</div>
 <input type="text" id="par1" name="par1" placeholder="Primer param. (a)">
 <input type="text" id="par2" name="par2" placeholder="Segundo param. (b)">
 <input type="text" id="par3" name="par3" placeholder="Tercer param. (c)">
