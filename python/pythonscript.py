@@ -152,7 +152,7 @@ async def nib(event):
   p.circle(data1, data2)
   p_json = json.dumps(json_item(p))
   Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-  document.getElementById("parametros-output").innerHTML = popt,np.sqrt(np.diag(pcov))
+  document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]}'
   
 
 you = create_proxy(nib)
