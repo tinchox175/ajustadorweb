@@ -23,8 +23,7 @@ async def process_file(event):
         for i in range(len(lista)):
           lista[i-1].replace(';',',')
           lista[i-1] = lista[i-1].split(',')
-        data = np.transpose(lista)
-        data = np.concatenate(data)
+        data = np.array(lista)
         global data1
         data1 = []
         global data2
