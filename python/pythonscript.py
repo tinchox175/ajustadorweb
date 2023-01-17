@@ -43,8 +43,8 @@ async def process_file(event):
             else:
                 data2.append(data[i][1])
             i+=1
-        data1 = np.array(data1, dtype=np.float32)
-        data2 = np.array(data2, dtype=np.float32)
+        data1 = np.array(data1, dtype=np.float64)
+        data2 = np.array(data2, dtype=np.float64)
         global data3
         data3 = [data1,data2]
         document.getElementById("plot").innerHTML = ''
@@ -146,8 +146,13 @@ async def nib(event):
     popt, pcov = curve_fit(ajuste, data1[:len(data2)], data2, p0=pcero)
   except ValueError:
     popt, pcov = curve_fit(ajuste, data1, data2[:len(data1)], p0=pcero)
+  except RuntimeError:
+    pass
   p = figure(plot_width=1000, plot_height=600)
-  p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
+  try:
+    p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
+  except NameError:
+    pass
   p.line(data1, data2, line_width = 1)
   p.circle(data1, data2)
   p_json = json.dumps(json_item(p))
