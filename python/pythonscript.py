@@ -152,7 +152,12 @@ async def nib(event):
   try:
     p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
   except NameError:
-    pass
+    p.line(data1, data2, line_width = 1)
+    p.circle(data1, data2)
+    p_json = json.dumps(json_item(p))
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+    document.getElementById("parametros-output").innerHTML = 'No se pudo ajustar tus datos, proba mejorando la función o los parámetros de búsqueda.'
+    break
   p.line(data1, data2, line_width = 1)
   p.circle(data1, data2)
   p_json = json.dumps(json_item(p))
