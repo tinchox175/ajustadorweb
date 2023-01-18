@@ -23,6 +23,10 @@
 #parametros{
   margin-top:4px;
 }
+.Logo{
+  border-radius: 8px;
+  border: 5px solid #5B5B89;
+}
 #miarchivo{
     color: white;
 }

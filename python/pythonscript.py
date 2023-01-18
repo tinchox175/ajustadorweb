@@ -47,7 +47,9 @@ async def process_file(event):
         data2 = np.array(data2, dtype=np.float64)
         global data3
         data3 = [data1,data2]
+        document.getElementById("content").innerHTML = ''
         document.getElementById("plot").innerHTML = ''
+        document.getElementById("parametros-output").innerHTML = 'Cargado.'
         p = figure(plot_width=1000, plot_height=600)
         p.line(data1, data2, line_width = 1)
         p.circle(data1, data2)
@@ -109,7 +111,7 @@ def ajuste(x,a,b,c,d,e):
   try:
     y = eval(funcionajustadora)
   except NameError:
-    pass
+    y= 404
   return y
 
 async def nib(event):
@@ -152,9 +154,21 @@ async def nib(event):
   except RuntimeError:
     pass
   except NameError:
+    p = figure(plot_width=1000, plot_height=600)
+    p.circle(0, 0)
+    p_json = json.dumps(json_item(p))
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
     document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
     return
-  p = figure(plot_width=1000, plot_height=600)
+  if ajuste(data1,*popt)==404:
+    p = figure(plot_width=1000, plot_height=600)
+    p.line(data1, data2, line_width = 1)
+    p.circle(data1, data2)
+    p_json = json.dumps(json_item(p))
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+    document.getElementById("parametros-output").innerHTML = 'No introdujiste una función.'
+    return
+  p = figure(plot_width=1000, plot_height=600)    
   try:
     p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
   except NameError:
@@ -166,14 +180,15 @@ async def nib(event):
     return
   global Sumsquare
   try:
-    Sumsquare = np.sum((data2-ajuste(data1, *popt))**2/ajuste(data1, *popt))
+    Sumsquare = np.sum((data2-ajuste(data1, *popt))**2)
+    TSS = np.sum((data2-np.mean(data2))**2)
   except NameError:
     pass
   p.line(data1, data2, line_width = 1)
   p.circle(data1, data2)
   p_json = json.dumps(json_item(p))
   Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-  document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]} .\n χ² vale aproximadamente {Sumsquare}. '
+  document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]} .\n RSS vale aproximadamente {Sumsquare}. R² vale aproximadamente {1-Sumsquare/TSS}.'
   
 
 you = create_proxy(nib)
