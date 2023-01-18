@@ -151,6 +151,9 @@ async def nib(event):
     popt, pcov = curve_fit(ajuste, data1, data2[:len(data1)], p0=pcero)
   except RuntimeError:
     pass
+  except NameError:
+    document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
+    return
   p = figure(plot_width=1000, plot_height=600)
   try:
     p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
