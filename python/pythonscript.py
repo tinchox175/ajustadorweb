@@ -106,7 +106,10 @@ par5 = document.getElementById("par5")
 par5.addEventListener("input", guardar, False)
 
 def ajuste(x,a,b,c,d,e):
-  y = eval(funcionajustadora)
+  try:
+    y = eval(funcionajustadora)
+  except NameError:
+    pass
   return y
 
 async def nib(event):
@@ -158,11 +161,16 @@ async def nib(event):
     Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
     document.getElementById("parametros-output").innerHTML = 'No se pudo ajustar tus datos, proba mejorando la función o los parámetros de búsqueda.'
     return
+  global Sumsquare
+  try:
+    Sumsquare = np.sum((data2-ajuste(data1, *popt))**2/ajuste(data1, *popt))
+  except NameError:
+    pass
   p.line(data1, data2, line_width = 1)
   p.circle(data1, data2)
   p_json = json.dumps(json_item(p))
   Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-  document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]}'
+  document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]} .\n χ² vale aproximadamente {Sumsquare}. '
   
 
 you = create_proxy(nib)
