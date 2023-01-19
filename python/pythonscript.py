@@ -119,10 +119,23 @@ def ajuste(x,a,b,c,d,e):
     y = 0
   return y
 
+def exceptor():
+  try:
+      p = figure(plot_width=1000, plot_height=600)
+      p.circle(data1, data2)
+      p.line(data1, data2, line_width = 1)
+      p_json = json.dumps(json_item(p))
+      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+      document.getElementById("parametros-output").innerHTML = 'Tu función es inválida.'
+  except:
+      p = figure(plot_width=1000, plot_height=600)
+      p.circle(0, 0)
+      p_json = json.dumps(json_item(p))
+      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+      document.getElementById("parametros-output").innerHTML = 'Tu archivo es inválido.'
+
 async def nib(event):
   global popt
-  global z
-  z = 0
   pcero = [1,1,1,1,1]
   try:
     pcero[0]= float(p1)
@@ -160,60 +173,11 @@ async def nib(event):
     try:
       popt, pcov = curve_fit(ajuste, data1, data2[:len(data1)], p0=pcero)
     except ValueError:
-      p = figure(plot_width=1000, plot_height=600)
-      p.circle(data1, data2)
-      p_json = json.dumps(json_item(p))
-      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-      document.getElementById("parametros-output").innerHTML = 'No introdujiste una función.'
-    except:
-      p = figure(plot_width=1000, plot_height=600)
-      p.circle(0, 0)
-      p_json = json.dumps(json_item(p))
-      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-      document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
+      exceptor()
   except RuntimeError:
     pass
-  except NameError:
-    try:
-      p = figure(plot_width=1000, plot_height=600)
-      p.circle(data1, data2)
-      p_json = json.dumps(json_item(p))
-      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-      document.getElementById("parametros-output").innerHTML = 'No introdujiste una función.'
-    except:
-      p = figure(plot_width=1000, plot_height=600)
-      p.circle(0, 0)
-      p_json = json.dumps(json_item(p))
-      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-      document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
-    return
-  except TypeError:
-    try:
-      p = figure(plot_width=1000, plot_height=600)
-      p.circle(data1, data2)
-      p_json = json.dumps(json_item(p))
-      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-      document.getElementById("parametros-output").innerHTML = 'No introdujiste una función.'
-    except:
-      p = figure(plot_width=1000, plot_height=600)
-      p.circle(0, 0)
-      p_json = json.dumps(json_item(p))
-      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-      document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
-    return
   except:
-    try:
-      p = figure(plot_width=1000, plot_height=600)
-      p.circle(data1, data2)
-      p_json = json.dumps(json_item(p))
-      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-      document.getElementById("parametros-output").innerHTML = 'No introdujiste una función.'
-    except:
-      p = figure(plot_width=1000, plot_height=600)
-      p.circle(0, 0)
-      p_json = json.dumps(json_item(p))
-      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-      document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
+    exceptor()
     return
   p = figure(plot_width=1000, plot_height=600)    
   try:
@@ -228,14 +192,15 @@ async def nib(event):
   global Sumsquare
   try:
     Sumsquare = np.sum((data2-ajuste(data1, *popt))**2)
-    TSS = np.sum((data2-np.mean(data2))**2)
+    TSS = np.sum((data2-np.full(len(data2),np.mean(data2)))**2)
+    SEE = np.sqrt(np.sum((data2-ajuste(data1,*popt))**2)/len(data2))
   except NameError:
     pass
   p.line(data1, data2, line_width = 1)
   p.circle(data1, data2)
   p_json = json.dumps(json_item(p))
   Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-  document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]} .\n RSS vale aproximadamente {Sumsquare}. R² vale aproximadamente {1-Sumsquare/TSS}.'
+  document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]} .\n RSS vale aproximadamente {np.round(Sumsquare,3)}. R² vale aproximadamente {np.round(1-Sumsquare/TSS,3)}. S vale aproximadamente {np.round(SEE,3)}'
   
 
 you = create_proxy(nib)
