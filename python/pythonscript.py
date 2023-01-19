@@ -196,6 +196,20 @@ async def nib(event):
       Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
       document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
     return
+  except:
+    try:
+      p = figure(plot_width=1000, plot_height=600)
+      p.circle(data1, data2)
+      p_json = json.dumps(json_item(p))
+      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+      document.getElementById("parametros-output").innerHTML = 'No introdujiste una función.'
+    except:
+      p = figure(plot_width=1000, plot_height=600)
+      p.circle(0, 0)
+      p_json = json.dumps(json_item(p))
+      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+      document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
+    return
   p = figure(plot_width=1000, plot_height=600)    
   try:
     p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
