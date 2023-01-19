@@ -111,11 +111,13 @@ def ajuste(x,a,b,c,d,e):
   try:
     y = eval(funcionajustadora)
   except NameError:
-    y= 404
+    z= 404
   return y
 
 async def nib(event):
   global popt
+  global z
+  z = 0
   pcero = [1,1,1,1,1]
   try:
     pcero[0]= float(p1)
@@ -160,7 +162,7 @@ async def nib(event):
     Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
     document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
     return
-  if ajuste(data1,*popt)==404:
+  if z==0:
     p = figure(plot_width=1000, plot_height=600)
     p.line(data1, data2, line_width = 1)
     p.circle(data1, data2)
