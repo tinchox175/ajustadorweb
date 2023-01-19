@@ -152,7 +152,20 @@ async def nib(event):
   try:
     popt, pcov = curve_fit(ajuste, data1[:len(data2)], data2, p0=pcero)
   except ValueError:
-    popt, pcov = curve_fit(ajuste, data1, data2[:len(data1)], p0=pcero)
+    try:
+      popt, pcov = curve_fit(ajuste, data1, data2[:len(data1)], p0=pcero)
+    except ValueError:
+      p = figure(plot_width=1000, plot_height=600)
+      p.circle(data1, data2)
+      p_json = json.dumps(json_item(p))
+      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+      document.getElementById("parametros-output").innerHTML = 'No introdujiste una función.'
+    except:
+      p = figure(plot_width=1000, plot_height=600)
+      p.circle(0, 0)
+      p_json = json.dumps(json_item(p))
+      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+      document.getElementById("parametros-output").innerHTML = 'No introdujiste un archivo.'
   except RuntimeError:
     pass
   except NameError:
