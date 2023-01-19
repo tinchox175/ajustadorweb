@@ -8,6 +8,7 @@ from bokeh.plotting import figure
 from bokeh.resources import CDN
 from scipy.optimize import curve_fit
 
+
 document.getElementById("content").innerHTML = ''
 p = figure(plot_width=1000, plot_height=600)
 p.circle(0, 0)
@@ -28,23 +29,26 @@ async def process_file(event):
         data1 = []
         global data2
         data2 = []
-        i = 1
+        i = 0
         while i<(len(data)-1):
-            print(i)
-            if data[i][0]=='':
-                break
+            print(data[i][0])
+            print(type(data[i][0]))
+            if data[i][0]=='' or data[i][1]=='' or any(c.isalpha() for c in data[i][0]) or any(c.isalpha() for c in data[i][1]):
+                pass
             else:
                 data1.append(data[i][0])
             i+=1
-        i = 1
+        i = 0
         while i<(len(data)-1):
-            if data[i][1]=='':
-                break
+            if data[i][0]=='' or data[i][1]=='' or any(c.isalpha() for c in data[i][1]) or any(c.isalpha() for c in data[i][0]):
+                pass
             else:
                 data2.append(data[i][1])
             i+=1
         data1 = np.array(data1, dtype=np.float64)
+        print(data1)
         data2 = np.array(data2, dtype=np.float64)
+        print(data2)
         global data3
         data3 = [data1,data2]
         document.getElementById("content").innerHTML = ''
@@ -110,6 +114,7 @@ par5.addEventListener("input", guardar, False)
 def ajuste(x,a,b,c,d,e):
   try:
     y = eval(funcionajustadora)
+    print(type(y))
   except SyntaxError:
     y = 0
   return y
