@@ -6,13 +6,21 @@
     border-radius: 8px;
     margin-bottom:2px;
   }
-  
-  #btn:hover {
+#cargando{
+  max-height: 600px;
+}
+#plot2g{
+  max-height: 300px;
+}
+#plot3g{
+  max-height: 300px;
+}
+#btn:hover {
     background-color: #3A3A66;
     color: white;
     border-radius: 8px;
   }
-  #yo {
+#yo {
     padding: 8px 16px;
     transition-duration: 0.4s;
     background-color: #5B5B89;
@@ -105,7 +113,21 @@ h1{
 }
 #content{
   background-color: rgba(0,0,0,0.2);
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  gap: 4px;
+  grid-auto-flow: column;
 }
 #plot{
   background-color: rgba(0,0,0,0.2);
+}
+
+#plots{
+  background-color: rgba(0,0,0,0.2);
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  gap: 4px;
+  grid-auto-flow: column;
 }
