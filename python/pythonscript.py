@@ -14,6 +14,14 @@ p = figure(plot_width=1000, plot_height=600)
 p.circle(0, 0)
 p_json = json.dumps(json_item(p))
 Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+p = figure(plot_width=500, plot_height=300)
+p.circle(0, 0)
+p_json = json.dumps(json_item(p))
+Bokeh.embed.embed_item(JSON.parse(p_json), "plot2")
+p = figure(plot_width=500, plot_height=300)
+p.circle(0, 0)
+p_json = json.dumps(json_item(p))
+Bokeh.embed.embed_item(JSON.parse(p_json), "plot3")
 
 async def process_file(event):
       fileList = event.target.files.to_py()
@@ -31,22 +39,30 @@ async def process_file(event):
         data2 = []
         i = 0
         while i<(len(data)-1):
-            print(data[i][0])
-            print(type(data[i][0]))
-            if data[i][0]=='' or data[i][1]=='' or any(c.isalpha() for c in data[i][0]) or any(c.isalpha() for c in data[i][1]):
+            if data[i][0]=='' or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
+                print('detectado')
+                print(print(data[i][0]))
+                print(type(data[i][0]))
                 pass
             else:
                 data1.append(data[i][0])
             i+=1
         i = 0
         while i<(len(data)-1):
-            if data[i][0]=='' or data[i][1]=='' or any(c.isalpha() for c in data[i][1]) or any(c.isalpha() for c in data[i][0]):
+            print(data[i][0],data[i][1])
+            if data[i][0]=='' or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
+                print('detectado')
+                print(print(data[i][0]))
+                print(type(data[i][0]))
                 pass
             else:
                 data2.append(data[i][1])
             i+=1
+        print(len(data1),len(data2))
+        print(data1)
         data1 = np.array(data1, dtype=np.float64)
         print(data1)
+        print(data2)
         data2 = np.array(data2, dtype=np.float64)
         print(data2)
         global data3
@@ -54,11 +70,13 @@ async def process_file(event):
         document.getElementById("content").innerHTML = ''
         document.getElementById("plot").innerHTML = ''
         document.getElementById("parametros-output").innerHTML = 'Cargado.'
+        
         p = figure(plot_width=1000, plot_height=600)
         p.line(data1, data2, line_width = 1)
         p.circle(data1, data2)
         p_json = json.dumps(json_item(p))
         Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+        print(len(data1),len(data2))
         #document.getElementById("content").innerHTML = data3
 
 
@@ -114,7 +132,12 @@ par5.addEventListener("input", guardar, False)
 def ajuste(x,a,b,c,d,e):
   try:
     y = eval(funcionajustadora)
-    print(type(y))
+  except SyntaxError:
+    y = 0
+  return y
+def ajustel(x,A,B):
+  try:
+    y = A*x+B
   except SyntaxError:
     y = 0
   return y
@@ -136,6 +159,7 @@ def exceptor():
 
 async def nib(event):
   global popt
+  global poptl
   pcero = [1,1,1,1,1]
   try:
     pcero[0]= float(p1)
@@ -168,6 +192,10 @@ async def nib(event):
   except ValueError:
     pass
   try:
+    poptl, pcovl = curve_fit(ajustel, np.log(data1[:len(data2)]), np.log(data2))
+  except:
+    pass
+  try:
     popt, pcov = curve_fit(ajuste, data1[:len(data2)], data2, p0=pcero)
   except ValueError:
     try:
@@ -181,11 +209,17 @@ async def nib(event):
     return
   p = figure(plot_width=1000, plot_height=600)    
   try:
+    p.line(data1, data2, line_width = 1)
     p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
+    p.circle(data1, data2)
+    p_json = json.dumps(json_item(p))
+    document.getElementById("plot").innerHTML = ''
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
   except NameError:
     p.line(data1, data2, line_width = 1)
     p.circle(data1, data2)
     p_json = json.dumps(json_item(p))
+    document.getElementById("plot").innerHTML = ''
     Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
     document.getElementById("parametros-output").innerHTML = 'No se pudo ajustar tus datos, proba mejorando la función o los parámetros de búsqueda.'
     return
@@ -196,12 +230,37 @@ async def nib(event):
     SEE = np.sqrt(np.sum((data2-ajuste(data1,*popt))**2)/len(data2))
   except NameError:
     pass
-  p.line(data1, data2, line_width = 1)
-  p.circle(data1, data2)
-  p_json = json.dumps(json_item(p))
-  Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-  document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]} .\n RSS vale aproximadamente {np.round(Sumsquare,3)}. R² vale aproximadamente {np.round(1-Sumsquare/TSS,3)}. S vale aproximadamente {np.round(SEE,3)}'
-  
+  #plot original#
+
+  #plot original#
+  #plot residuos#
+  try:
+    p = figure(plot_width=500, plot_height=300)
+    p.line(data1, data2-ajuste(data1,*popt), line_width = 1)
+    p.circle(data1, data2-ajuste(data1,*popt), line_width = 1)
+    p_json = json.dumps(json_item(p))
+    document.getElementById("plot2").innerHTML = ''
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot2")
+  except NameError:
+    pass
+  #plot residuos#
+  #plot log#
+  try:
+    p = figure(plot_width=500, plot_height=300)
+    p.line(np.log(data1), np.log(data2), line_width = 1)
+    p.circle(np.log(data1), np.log(data2))
+    p.line(np.log(data1), ajustel(np.log(data1), *poptl), line_width=2, line_color="orange")
+    p_json = json.dumps(json_item(p))
+    document.getElementById("plot3").innerHTML = ''
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot3")
+  except:
+    pass
+  #plot log#
+  try:
+    document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]}. Los parametros logaritmicos son A = {poptl[0]} y B = {poptl[1]} .\n RSS vale aproximadamente {np.round(Sumsquare,3)}. R² vale aproximadamente {np.round(1-Sumsquare/TSS,3)}. S vale aproximadamente {np.round(SEE,3)}'
+  except:
+    document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]}.\n RSS vale aproximadamente {np.round(Sumsquare,3)}. R² vale aproximadamente {np.round(1-Sumsquare/TSS,3)}. S vale aproximadamente {np.round(SEE,3)}'
+
 
 you = create_proxy(nib)
 
