@@ -14,7 +14,6 @@
     <title>Fitear</title>
     <py-env>
     - bokeh
-    - pandas
     - scipy
     </py-env>
     <!--<link rel="stylesheet" href="tinchox175.github.io/ajustadorweb/visuales.css" />-->
@@ -43,12 +42,20 @@
     <br />
       <center><div id='parametros-output'></div></center>
       <div id="content">
-        <center>
-        <img id="cargando" src="imagenes/cargando.gif" width="1000" height="200">
-        </center>
+        <img id="cargando" src="imagenes/cargando.gif" width="1000" height="1">
+        <div id="plots2">
+        <div id="plot2"><img id="plot2g" src="imagenes/cargando.gif" width="500" height="300"></div>
+        <div id="plot3"><img id="plot3g" src="imagenes/cargando.gif" width="500" height="300"></div>
+        </div>
       </div>
     </div>
-    <center><div id="plot"></div></center>
+    <center><div id="plots">
+      <div id="plot"></div>
+      <div id="plots2">
+      <div id="plot2"></div>
+      <div id="plot3"></div>
+      </div>
+    </div></center>
     <br>
     <button id="btn">Limpiar gráficos</button>
     <br>
