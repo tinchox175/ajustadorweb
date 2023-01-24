@@ -66,15 +66,16 @@ async def process_file(event):
         global data2
         data2 = []
         i = 0
+        letras = set('abcdfghijklmnopqrstuvwxyzABCDFGHIJKLMNOPQRSTUVWXYZ')
         while i<(len(data)-1):
-            if data[i][0]=='' or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
+            if data[i][0]=='' or any((c in letras) for c in data[i][0]) or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
                 pass
             else:
                 data1.append(data[i][0])
             i+=1
         i = 0
         while i<(len(data)-1):
-            if data[i][0]=='' or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
+            if data[i][0]=='' or any((c in letras) for c in data[i][0]) or  data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
                 pass
             else:
                 data2.append(data[i][1])
