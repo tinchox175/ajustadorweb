@@ -1,7 +1,19 @@
-#btn {
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+#botoneras{
+  float:right;
+}
+.oldb {
     padding: 8px 16px;
     transition-duration: 0.4s;
-    background-color: #5B5B89;
+    background-color: #348BD8;
+    color: white;
+    border-radius: 8px;
+    margin-bottom:2px;
+  }
+  .oldb2 {
+    padding: 8px 16px;
+    transition-duration: 0.4s;
+    background-color: #348BD8;
     color: white;
     border-radius: 8px;
     margin-bottom:2px;
@@ -15,43 +27,29 @@
 #plot3g{
   max-height: 300px;
 }
-#btn:hover {
+.oldb:hover {
     background-color: #3A3A66;
     color: white;
     border-radius: 8px;
   }
-#yo {
-    padding: 8px 16px;
-    transition-duration: 0.4s;
-    background-color: #5B5B89;
+  .oldb2:hover {
+    background-color: #3A3A66;
     color: white;
     border-radius: 8px;
-    margin-top:4px;
   }
 #parametros{
   margin-top:4px;
 }
-.Logo{
-  border-radius: 8px;
-  border: 5px solid #5B5B89;
-}
 #miarchivo{
     color: white;
+    font-family: 'PT Sans', sans-serif !important;
+    font-size:medium !important;
 }
 #parametros-output{
     color: white;
 }
 #partida{
     color: white;
-}
-  #yo:hover {
-    background-color: #3A3A66;
-    color: white;
-    border-radius: 8px;
-  }
-
-body{
-    background-color: #3C3C50;
 }
 
 h1{
@@ -60,6 +58,9 @@ h1{
 }
 #hintB {
   cursor: pointer;
+}
+#miarchivo{
+  color:white;
 }
 .modal {
   display: none;
@@ -112,22 +113,57 @@ h1{
   height: 800px;
 }
 #content{
-  background-color: rgba(0,0,0,0.2);
+  background-color: #FFFFFF;
   display: grid;
   justify-content: center;
   align-content: center;
   gap: 4px;
   grid-auto-flow: column;
-}
-#plot{
-  background-color: rgba(0,0,0,0.2);
+  color:white;
+  font-family: 'PT Sans', sans-serif;
+  font-size:medium;
 }
 
-#plots{
-  background-color: rgba(0,0,0,0.2);
+.plots{
+  background-color: #FFFFFF;
   display: grid;
   justify-content: center;
   align-content: center;
   gap: 4px;
   grid-auto-flow: column;
+  color:white;
+  font-family: 'PT Sans', sans-serif !important;
+  font-size:medium !important;
+}
+#plotd{
+  color:white;
+  font-family: 'PT Sans', sans-serif !important;
+  font-size:medium !important;
+}
+#plot2d{
+  color:white;
+  font-family: 'PT Sans', sans-serif !important;
+  font-size:medium !important;
+}
+#plot3d{
+  color:white;
+  font-family: 'PT Sans', sans-serif !important;
+  font-size:medium !important;
+}
+#logo{
+  color:white;
+  font-family: 'PT Sans', sans-serif !important;
+  font-size:72px !important;
+}
+body{
+  background-color: #75AADB;
+}
+body.dark {
+  background-color: #29283D;
+}
+.darkplots{
+  background-color: #14121B;
+}
+.darkbotones{
+  background-color: #191926;
 }
