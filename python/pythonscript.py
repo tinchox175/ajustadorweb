@@ -5,22 +5,51 @@ import numpy as np
 from bokeh.embed import json_item
 from bokeh.plotting import figure
 from scipy.optimize import curve_fit
+
 global bckg
 bckg = '#FFFFFF'
 
+currentTheme = document.getElementById('theme')
+print(currentTheme.innerHTML)
+if currentTheme.innerHTML == 'dark':
+  bckg = '#14121B'
+
 document.getElementById("content").innerHTML = ''
 p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
+p.background_fill_color = bckg
+p.outline_line_color = bckg
+p.border_fill_color = bckg
+if bckg=='#14121B':
+          p.title.text_color= 'white'
+          p.xaxis.axis_label_text_color = "white"
+          p.yaxis.axis_label_text_color = "white"
 p.circle(0, 0)
 p_json = json.dumps(json_item(p))
 Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
 p = figure(plot_width=500, plot_height=300, title="Residuos")
+p.background_fill_color = bckg
+p.outline_line_color = bckg
+p.border_fill_color = bckg
+if bckg=='#14121B':
+          p.title.text_color= 'white'
+          p.xaxis.axis_label_text_color = "white"
+          p.yaxis.axis_label_text_color = "white"
 p.circle(0, 0)
 p_json = json.dumps(json_item(p))
 Bokeh.embed.embed_item(JSON.parse(p_json), "plot2")
 p = figure(plot_width=500, plot_height=300, title="Logaritmo")
+p.background_fill_color = bckg
+p.outline_line_color = bckg
+p.border_fill_color = bckg
+if bckg=='#14121B':
+          p.title.text_color= 'white'
+          p.xaxis.axis_label_text_color = "white"
+          p.yaxis.axis_label_text_color = "white"
 p.circle(0, 0)
 p_json = json.dumps(json_item(p))
 Bokeh.embed.embed_item(JSON.parse(p_json), "plot3")
+
+
 
 async def process_file(event):
       fileList = event.target.files.to_py()
