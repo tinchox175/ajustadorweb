@@ -30,9 +30,31 @@ span.onclick = function() {
 }
 const cdm = document.getElementById('bdm');
 
-cdm.addEventListener('click', function handleClick() {
+const currentTheme = localStorage.getItem("theme");
+
+tema = document.getElementById('theme')
+
+if (currentTheme == "dark") {
+  tema.innerHTML = 'dark'
   document.body.classList.toggle('dark');
   document.querySelector(".plots").classList.toggle("darkplots");
   document.querySelector(".oldb").classList.toggle("darkbotones");
   document.querySelector(".oldb2").classList.toggle("darkbotones");
+}
+
+cdm.addEventListener('click', function handleClick() {
+  if (tema.innerHTML=='dark'){
+    tema.innerHTML='light'
+  }else{
+    tema.innerHTML='dark'
+  }
+  document.body.classList.toggle('dark');
+  document.querySelector(".plots").classList.toggle("darkplots");
+  document.querySelector(".oldb").classList.toggle("darkbotones");
+  document.querySelector(".oldb2").classList.toggle("darkbotones");
+  let theme = "light";
+  if (document.body.classList.contains("dark")) {
+    theme = "dark";
+  }
+  localStorage.setItem("theme", theme);
 });
