@@ -16,51 +16,51 @@
     - bokeh
     - scipy
     </py-env>
-    <!--<link rel="stylesheet" href="tinchox175.github.io/ajustadorweb/visuales.css" />-->
     <link rel="stylesheet" href="css/visuales.css" />
   </head>
   <body>
+  <div id="botoneras">
   <div>
-    <a href="https://github.com/tinchox175/ajustadorweb"><img src="imagenes/github.png" style="width:36px;height:36px;float:right"></a>
+  <a href="https://github.com/tinchox175/ajustadorweb"><img src="imagenes/github.png" style="float:right"></a>
   </div>
-  <div style="float: right">
-  <img id="hintB" src="imagenes/hint.png" width="48" height="48">
+  <div>
+  <img id="hintB" src="imagenes/hint.png">
   </div>
   <div id="hint" class="modal">
-
+  
   <img class="modal-content" id="tutorialP">
 
   <span class="close">&times;</span>
   </div>
-  <center><img class="Logo" src="imagenes/logo.png"></center>
-    <br />
-    <div id='miarchivo'><label for="myfile">Elegí tu archivo:</label></div>
-    <input type="file" id="myfile" name="myfile">
-    <br />
-    <br />
+  <div>
+  <button id="bdm"><img src="imagenes/nm.png"/></button>
+  </div>
+  </div>
+  <center><h1 id="logo"><a href="https:\\www.fite.ar">fite.ar</a></h1></center>
+    <div id='miarchivo'><label for="myfile">Elegí tu archivo:<input type="file" id="myfile" name="myfile"></label></div>
     <div id="print_output"></div>
     <br />
       <center><div id='parametros-output'></div></center>
       <div id="content">
-        <img id="cargando" src="imagenes/cargando.gif" width="1000" height="1">
+        <div id="plotd"><img id="cargando" src="imagenes/cargando.gif" width="1000" height="1"></div>
         <div id="plots2">
-        <div id="plot2"><img id="plot2g" src="imagenes/cargando.gif" width="500" height="300"></div>
-        <div id="plot3"><img id="plot3g" src="imagenes/cargando.gif" width="500" height="300"></div>
+        <div id="plot2"><div id="plotd"></div><img id="plot2g" src="imagenes/cargando.gif" width="500" height="300"></div>
+        <div id="plot3"><div id="plotd"></div><img id="plot3g" src="imagenes/cargando.gif" width="500" height="300"></div>
         </div>
       </div>
     </div>
-    <center><div id="plots">
-      <div id="plot"></div>
+    <div class="plots">
+      <div id="plotd"></div><div id="plot"></div>
       <div id="plots2">
-      <div id="plot2"></div>
-      <div id="plot3"></div>
+        <div id="plot2"><div id="plot2d"></div></div>
+        <div id="plot3"><div id="plot3d"></div></div>
       </div>
-    </div></center>
+    </div>
     <br>
-    <button id="btn">Limpiar gráficos</button>
+    <button id="btn" class="oldb">Limpiar gráficos</button>
     <br>
-    <button id="yo">Ajustar</button>
-    <input type="text" id="funcionajusta" name="funcionajusta" placeholder="Ej.: a*np.sin(b*x+c)+d*e">
+    <button id="yo" class="oldb2">Ajustar</button>
+    <input type="text" style="width: 300px;" id="funcionajusta" name="funcionajusta" placeholder="Ej.: a*np.sin(b*x+c)+d*e">
     
     <script src="javascript/jscript.js"></script>
 
