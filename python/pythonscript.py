@@ -10,7 +10,7 @@ global bckg
 bckg = '#FFFFFF'
 
 currentTheme = document.getElementById('theme')
-print(currentTheme.innerHTML)
+
 if currentTheme.innerHTML == 'dark':
   bckg = '#14121B'
 
