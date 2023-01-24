@@ -167,3 +167,6 @@ body.dark {
 .darkbotones{
   background-color: #191926;
 }
+.darkcontent{
+  filter:invert(1);
+}
