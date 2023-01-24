@@ -40,6 +40,7 @@ if (currentTheme == "dark") {
   document.querySelector(".plots").classList.toggle("darkplots");
   document.querySelector(".oldb").classList.toggle("darkbotones");
   document.querySelector(".oldb2").classList.toggle("darkbotones");
+  document.querySelector(".contents").classList.toggle("darkcontent");
 }
 
 cdm.addEventListener('click', function handleClick() {
@@ -52,6 +53,7 @@ cdm.addEventListener('click', function handleClick() {
   document.querySelector(".plots").classList.toggle("darkplots");
   document.querySelector(".oldb").classList.toggle("darkbotones");
   document.querySelector(".oldb2").classList.toggle("darkbotones");
+  document.querySelector(".contents").classList.toggle("darkcontent");
   let theme = "light";
   if (document.body.classList.contains("dark")) {
     theme = "dark";
