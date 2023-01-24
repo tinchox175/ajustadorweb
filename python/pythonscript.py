@@ -1,24 +1,23 @@
 import json
-import asyncio
 from js import document, FileReader, console, JSON, Bokeh
 from pyodide import create_proxy
 import numpy as np
 from bokeh.embed import json_item
 from bokeh.plotting import figure
-from bokeh.resources import CDN
 from scipy.optimize import curve_fit
-
+global bckg
+bckg = '#FFFFFF'
 
 document.getElementById("content").innerHTML = ''
-p = figure(plot_width=1000, plot_height=600)
+p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
 p.circle(0, 0)
 p_json = json.dumps(json_item(p))
 Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-p = figure(plot_width=500, plot_height=300)
+p = figure(plot_width=500, plot_height=300, title="Residuos")
 p.circle(0, 0)
 p_json = json.dumps(json_item(p))
 Bokeh.embed.embed_item(JSON.parse(p_json), "plot2")
-p = figure(plot_width=500, plot_height=300)
+p = figure(plot_width=500, plot_height=300, title="Logaritmo")
 p.circle(0, 0)
 p_json = json.dumps(json_item(p))
 Bokeh.embed.embed_item(JSON.parse(p_json), "plot3")
@@ -40,43 +39,35 @@ async def process_file(event):
         i = 0
         while i<(len(data)-1):
             if data[i][0]=='' or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
-                print('detectado')
-                print(print(data[i][0]))
-                print(type(data[i][0]))
                 pass
             else:
                 data1.append(data[i][0])
             i+=1
         i = 0
         while i<(len(data)-1):
-            print(data[i][0],data[i][1])
             if data[i][0]=='' or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
-                print('detectado')
-                print(print(data[i][0]))
-                print(type(data[i][0]))
                 pass
             else:
                 data2.append(data[i][1])
             i+=1
-        print(len(data1),len(data2))
-        print(data1)
         data1 = np.array(data1, dtype=np.float64)
-        print(data1)
-        print(data2)
         data2 = np.array(data2, dtype=np.float64)
-        print(data2)
         global data3
         data3 = [data1,data2]
-        document.getElementById("content").innerHTML = ''
-        document.getElementById("plot").innerHTML = ''
         document.getElementById("parametros-output").innerHTML = 'Cargado.'
-        
-        p = figure(plot_width=1000, plot_height=600)
+        document.getElementById("plot").innerHTML = ''
+        p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
+        p.background_fill_color = bckg
+        p.outline_line_color = bckg
+        p.border_fill_color = bckg
+        if bckg=='#14121B':
+          p.title.text_color= 'white'
+          p.xaxis.axis_label_text_color = "white"
+          p.yaxis.axis_label_text_color = "white"
         p.line(data1, data2, line_width = 1)
         p.circle(data1, data2)
         p_json = json.dumps(json_item(p))
         Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-        print(len(data1),len(data2))
         #document.getElementById("content").innerHTML = data3
 
 
@@ -144,14 +135,20 @@ def ajustel(x,A,B):
 
 def exceptor():
   try:
-      p = figure(plot_width=1000, plot_height=600)
+      p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
+      p.background_fill_color = bckg
+      p.outline_line_color = bckg
+      p.border_fill_color = bckg
       p.circle(data1, data2)
       p.line(data1, data2, line_width = 1)
       p_json = json.dumps(json_item(p))
       Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
       document.getElementById("parametros-output").innerHTML = 'Tu función es inválida.'
   except:
-      p = figure(plot_width=1000, plot_height=600)
+      p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
+      p.background_fill_color = bckg
+      p.outline_line_color = bckg
+      p.border_fill_color = bckg
       p.circle(0, 0)
       p_json = json.dumps(json_item(p))
       Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
@@ -207,7 +204,14 @@ async def nib(event):
   except:
     exceptor()
     return
-  p = figure(plot_width=1000, plot_height=600)    
+  p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
+  p.background_fill_color = bckg
+  p.outline_line_color = bckg
+  p.border_fill_color = bckg
+  if bckg=='#14121B':
+          p.title.text_color= 'white'
+          p.xaxis.axis_label_text_color = "white"
+          p.yaxis.axis_label_text_color = "white"
   try:
     p.line(data1, data2, line_width = 1)
     p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
@@ -235,7 +239,14 @@ async def nib(event):
   #plot original#
   #plot residuos#
   try:
-    p = figure(plot_width=500, plot_height=300)
+    p = figure(plot_width=500, plot_height=300, title="Residuos")
+    p.background_fill_color = bckg
+    p.outline_line_color = bckg
+    p.border_fill_color = bckg
+    if bckg=='#14121B':
+          p.title.text_color= 'white'
+          p.xaxis.axis_label_text_color = "white"
+          p.yaxis.axis_label_text_color = "white"
     p.line(data1, data2-ajuste(data1,*popt), line_width = 1)
     p.circle(data1, data2-ajuste(data1,*popt), line_width = 1)
     p_json = json.dumps(json_item(p))
@@ -246,7 +257,14 @@ async def nib(event):
   #plot residuos#
   #plot log#
   try:
-    p = figure(plot_width=500, plot_height=300)
+    p = figure(plot_width=500, plot_height=300, title="Logaritmo")
+    p.background_fill_color = bckg
+    p.outline_line_color = bckg
+    p.border_fill_color = bckg
+    if bckg=='#14121B':
+          p.title.text_color= 'white'
+          p.xaxis.axis_label_text_color = "white"
+          p.yaxis.axis_label_text_color = "white"
     p.line(np.log(data1), np.log(data2), line_width = 1)
     p.circle(np.log(data1), np.log(data2))
     p.line(np.log(data1), ajustel(np.log(data1), *poptl), line_width=2, line_color="orange")
@@ -261,18 +279,142 @@ async def nib(event):
   except:
     document.getElementById("parametros-output").innerHTML = f'Los parametros son: a = {popt[0]}, b = {popt[1]}, c = {popt[2]}, d = {popt[3]}, e = {popt[4]}.\n RSS vale aproximadamente {np.round(Sumsquare,3)}. R² vale aproximadamente {np.round(1-Sumsquare/TSS,3)}. S vale aproximadamente {np.round(SEE,3)}'
 
-
 you = create_proxy(nib)
 
 b = document.getElementById("yo")
 b.addEventListener("click", you, False)
 
 async def limpiadora(event):
+  document.getElementById("plot").innerHTML = ''
+  p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
+  p.background_fill_color = bckg
+  p.outline_line_color = bckg
+  p.border_fill_color = bckg
+  if bckg=='#14121B':
+      p.title.text_color= 'white'
+      p.xaxis.axis_label_text_color = "white"
+      p.yaxis.axis_label_text_color = "white"
   p.circle(0, 0)
   p_json = json.dumps(json_item(p))
   Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+  document.getElementById("plot2").innerHTML = ''
+  p = figure(plot_width=500, plot_height=300, title="Residuos")
+  p.background_fill_color = bckg
+  p.outline_line_color = bckg
+  p.border_fill_color = bckg
+  if bckg=='#14121B':
+      p.title.text_color= 'white'
+      p.xaxis.axis_label_text_color = "white"
+      p.yaxis.axis_label_text_color = "white"
+  p.circle(0, 0)
+  p_json = json.dumps(json_item(p))
+  Bokeh.embed.embed_item(JSON.parse(p_json), "plot2")
+  document.getElementById("plot3").innerHTML = ''
+  p = figure(plot_width=500, plot_height=300, title="Logaritmo")
+  p.background_fill_color = bckg
+  p.outline_line_color = bckg
+  p.border_fill_color = bckg
+  if bckg=='#14121B':
+      p.title.text_color= 'white'
+      p.xaxis.axis_label_text_color = "white"
+      p.yaxis.axis_label_text_color = "white"
+  p.circle(0, 0)
+  p_json = json.dumps(json_item(p))
+  Bokeh.embed.embed_item(JSON.parse(p_json), "plot3")
 
 limpia = create_proxy(limpiadora)
 
 clear = document.getElementById("btn")
 clear.addEventListener("click", limpia, False)
+
+async def modosc(event):
+  global bckg
+  if bckg == '#14121B':
+    bckg ='#FFFFFF'
+  else:
+    bckg = '#14121B'
+  document.getElementById("plot").innerHTML = ''
+  try:
+      p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
+      p.background_fill_color = bckg
+      p.outline_line_color = bckg
+      p.border_fill_color = bckg
+      p.title.text_color= 'white'
+      p.xaxis.axis_label_text_color = "white"
+      p.yaxis.axis_label_text_color = "white"
+      p.circle(data1, data2)
+      try:
+        p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
+      except:
+        pass
+      p.line(data1, data2, line_width = 1)
+      p_json = json.dumps(json_item(p))
+      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+  except:
+      p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
+      p.background_fill_color = bckg
+      p.outline_line_color = bckg
+      p.border_fill_color = bckg
+      p.title.text_color= 'white'
+      p.xaxis.axis_label_text_color = "white"
+      p.yaxis.axis_label_text_color = "white"
+      p.circle(0, 0)
+      p_json = json.dumps(json_item(p))
+      Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+  try:
+    p = figure(plot_width=500, plot_height=300, title="Residuos")
+    p.background_fill_color = bckg
+    p.outline_line_color = bckg
+    p.border_fill_color = bckg
+    p.title.text_color= 'white'
+    p.xaxis.axis_label_text_color = "white"
+    p.yaxis.axis_label_text_color = "white"
+    p.line(data1, data2-ajuste(data1,*popt), line_width = 1)
+    p.circle(data1, data2-ajuste(data1,*popt), line_width = 1)
+    p_json = json.dumps(json_item(p))
+    document.getElementById("plot2").innerHTML = ''
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot2")
+  except:
+    p = figure(plot_width=500, plot_height=300, title="Residuos")
+    p.background_fill_color = bckg
+    p.outline_line_color = bckg
+    p.border_fill_color = bckg
+    p.title.text_color= 'white'
+    p.xaxis.axis_label_text_color = "white"
+    p.yaxis.axis_label_text_color = "white"
+    p.circle(0, 0)
+    p_json = json.dumps(json_item(p))
+    document.getElementById("plot2").innerHTML = ''
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot2")
+  try:
+    p = figure(plot_width=500, plot_height=300, title="Logaritmo")
+    p.background_fill_color = bckg
+    p.outline_line_color = bckg
+    p.border_fill_color = bckg
+    p.line(np.log(data1), np.log(data2), line_width = 1)
+    p.circle(np.log(data1), np.log(data2))
+    p.line(np.log(data1), ajustel(np.log(data1), *poptl), line_width=2, line_color="orange")
+    p.title.text_color= 'white'
+    p.xaxis.axis_label_text_color = "white"
+    p.yaxis.axis_label_text_color = "white"
+    p_json = json.dumps(json_item(p))
+    document.getElementById("plot3").innerHTML = ''
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot3")
+  except:
+    p = figure(plot_width=500, plot_height=300, title="Logaritmo")
+    p.background_fill_color = bckg
+    p.outline_line_color = bckg
+    p.border_fill_color = bckg
+    p.title.text_color= 'white'
+    p.xaxis.axis_label_text_color = "white"
+    p.yaxis.axis_label_text_color = "white"
+    p.circle(0, 0)
+    p_json = json.dumps(json_item(p))
+    document.getElementById("plot3").innerHTML = ''
+    Bokeh.embed.embed_item(JSON.parse(p_json), "plot3")
+  return
+
+oscuridad = create_proxy(modosc)
+
+clear = document.getElementById("bdm")
+clear.addEventListener("click", oscuridad, False)
