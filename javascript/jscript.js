@@ -28,3 +28,11 @@ span.onclick = function() {
   modal.style.display = "none";
 }
 }
+const cdm = document.getElementById('bdm');
+
+cdm.addEventListener('click', function handleClick() {
+  document.body.classList.toggle('dark');
+  document.querySelector(".plots").classList.toggle("darkplots");
+  document.querySelector(".oldb").classList.toggle("darkbotones");
+  document.querySelector(".oldb2").classList.toggle("darkbotones");
+});
