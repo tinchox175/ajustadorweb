@@ -60,3 +60,16 @@ cdm.addEventListener('click', function handleClick() {
   }
   localStorage.setItem("theme", theme);
 });
+
+const leyotutorial = localStorage.getItem("tutorialq");
+
+if (leyotutorial != 'yes') {
+    console.log('hola')
+    modal.style.display = "block";
+    modalImg.src = "imagenes/tutorial.png";
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+      modal.style.display = "none";
+};
+localStorage.setItem("tutorialq", 'yes');
+}
