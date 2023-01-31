@@ -1,7 +1,6 @@
 import json
 from js import document, FileReader, console, JSON, Bokeh
 from pyodide import create_proxy
-from numpy import *
 import numpy as np
 from bokeh.embed import json_item
 from bokeh.plotting import figure
