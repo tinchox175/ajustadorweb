@@ -1,6 +1,7 @@
 import json
 from js import document, FileReader, console, JSON, Bokeh
 from pyodide import create_proxy
+from numpy import *
 import numpy as np
 from bokeh.embed import json_item
 from bokeh.plotting import figure
@@ -94,7 +95,7 @@ async def process_file(event):
           p.title.text_color= 'white'
           p.xaxis.axis_label_text_color = "white"
           p.yaxis.axis_label_text_color = "white"
-        p.line(data1, data2, line_width = 1)
+        #p.line(data1, data2, line_width = 1)
         p.circle(data1, data2)
         p_json = json.dumps(json_item(p))
         Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
@@ -170,7 +171,7 @@ def exceptor():
       p.outline_line_color = bckg
       p.border_fill_color = bckg
       p.circle(data1, data2)
-      p.line(data1, data2, line_width = 1)
+      #p.line(data1, data2, line_width = 1)
       p_json = json.dumps(json_item(p))
       Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
       document.getElementById("parametros-output").innerHTML = 'Tu función es inválida.'
@@ -238,19 +239,20 @@ async def nib(event):
   p.background_fill_color = bckg
   p.outline_line_color = bckg
   p.border_fill_color = bckg
+  equis = np.linspace(data1[0],data1[-1],100)
   if bckg=='#14121B':
           p.title.text_color= 'white'
           p.xaxis.axis_label_text_color = "white"
           p.yaxis.axis_label_text_color = "white"
   try:
-    p.line(data1, data2, line_width = 1)
-    p.line(data1, ajuste(data1, *popt), line_width=2, line_color="orange")
+    #p.line(data1, data2, line_width = 1)
+    p.line(data1, ajuste(equis, *popt), line_width=2, line_color="orange")
     p.circle(data1, data2)
     p_json = json.dumps(json_item(p))
     document.getElementById("plot").innerHTML = ''
     Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
   except NameError:
-    p.line(data1, data2, line_width = 1)
+    #p.line(data1, data2, line_width = 1)
     p.circle(data1, data2)
     p_json = json.dumps(json_item(p))
     document.getElementById("plot").innerHTML = ''
