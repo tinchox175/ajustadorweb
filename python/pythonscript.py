@@ -67,39 +67,43 @@ async def process_file(event):
         global data2
         data2 = []
         i = 0
-        letras = set('abcdfghijklmnopqrstuvwxyzABCDFGHIJKLMNOPQRSTUVWXYZ')
+        print(data)
         while i<(len(data)-1):
-            if data[i][0]=='' or any((c in letras) for c in data[i][0]) or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
+            if data[i][0]=='' or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
                 pass
             else:
                 data1.append(data[i][0])
             i+=1
         i = 0
         while i<(len(data)-1):
-            if data[i][0]=='' or any((c in letras) for c in data[i][0]) or  data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
+            if data[i][0]=='' or data[i][1]=='' or data[i][0]==' ' or data[i][1]==' ' or data[i][0]=='\r' or data[i][1]=='\r':
                 pass
             else:
                 data2.append(data[i][1])
             i+=1
-        data1 = np.array(data1, dtype=np.float64)
-        data2 = np.array(data2, dtype=np.float64)
-        global data3
-        data3 = [data1,data2]
-        document.getElementById("parametros-output").innerHTML = 'Cargado.'
-        document.getElementById("plot").innerHTML = ''
-        p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
-        p.background_fill_color = bckg
-        p.outline_line_color = bckg
-        p.border_fill_color = bckg
-        if bckg=='#14121B':
-          p.title.text_color= 'white'
-          p.xaxis.axis_label_text_color = "white"
-          p.yaxis.axis_label_text_color = "white"
-        #p.line(data1, data2, line_width = 1)
-        p.circle(data1, data2)
-        p_json = json.dumps(json_item(p))
-        Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
-        #document.getElementById("content").innerHTML = data3
+        try:
+          data1 = np.array(data1, dtype=np.float64)
+          data2 = np.array(data2, dtype=np.float64)
+          global data3
+          data3 = [data1,data2]
+          document.getElementById("parametros-output").innerHTML = 'Cargado.'
+          document.getElementById("plot").innerHTML = ''
+          p = figure(plot_width=1000, plot_height=600, title="Gráfico y ajuste")
+          p.background_fill_color = bckg
+          p.outline_line_color = bckg
+          p.border_fill_color = bckg
+          if bckg=='#14121B':
+            p.title.text_color= 'white'
+            p.xaxis.axis_label_text_color = "white"
+            p.yaxis.axis_label_text_color = "white"
+          #p.line(data1, data2, line_width = 1)
+          print(data3)
+          p.circle(data1, data2)
+          p_json = json.dumps(json_item(p))
+          Bokeh.embed.embed_item(JSON.parse(p_json), "plot")
+          #document.getElementById("content").innerHTML = data3
+        except:
+          document.getElementById("parametros-output").innerHTML = 'Error en el archivo.'
 
 
 file_event = create_proxy(process_file)
@@ -246,7 +250,7 @@ async def nib(event):
           p.yaxis.axis_label_text_color = "white"
   try:
     #p.line(data1, data2, line_width = 1)
-    p.line(data1, ajuste(equis, *popt), line_width=2, line_color="orange")
+    p.line(equis, ajuste(equis, *popt), line_width=1, line_color="orange")
     p.circle(data1, data2)
     p_json = json.dumps(json_item(p))
     document.getElementById("plot").innerHTML = ''
